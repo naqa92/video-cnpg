@@ -1,0 +1,32 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: restore
+spec:
+  instances: 2
+  bootstrap:
+    recovery:
+      source: bootstrap-source
+      backup:
+        name: db2-backup-auto-20250905105419 # get backup
+      recoveryTarget:
+        backupID: "20250905T105420" # describe backup
+        targetImmediate: true # Immediate recovery
+        #targetTime: "2025-XX-XX XX:XX:XX+00" # PITR recovery (format date -Is)
+  storage:
+    size: 5G
+  walStorage:
+    size: 5G
+
+  plugins: # Permet au cluster restore de créer des backups
+    - name: barman-cloud.cloudnative-pg.io
+      parameters:
+        barmanObjectName: backup-store
+
+  externalClusters: # Permet de référencer backup-store
+    - name: bootstrap-source
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: backup-store
+          serverName: db2

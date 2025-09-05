@@ -1,0 +1,24 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: backup-store
+  namespace: demo
+spec:
+  retentionPolicy: "7d"
+  configuration:
+    destinationPath: "s3://cnpg-demo-zone-infra"
+    endpointURL: "https://s3.eu-west-3.amazonaws.com"
+    data:
+      compression: bzip2
+    wal:
+      compression: bzip2
+    s3Credentials:
+      accessKeyId:
+        name: aws-creds
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: aws-creds
+        key: SECRET_ACCESS_KEY
+      region:
+        name: aws-creds
+        key: AWS_DEFAULT_REGION

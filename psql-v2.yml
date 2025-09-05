@@ -1,0 +1,19 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: db2
+spec:
+  instances: 2
+  storage:
+    size: 5G
+  walStorage:
+    size: 5G
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true # le plugin s’occupe de l’archivage WAL
+      parameters:
+        barmanObjectName: backup-store # référence à l'ObjectStore
+  bootstrap:
+    initdb:
+      database: todolist
+      owner: zoneinfra

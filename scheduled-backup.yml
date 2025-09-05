@@ -1,0 +1,14 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: db2-backup-auto
+spec:
+  schedule: "0 * * * * *" # toutes les minutes
+  backupOwnerReference: self # le ScheduledBackup « possède » les Backups créés
+  immediate: true # lance un backup dès la création du ScheduledBackup (optionnel)
+  suspend: false # mets à true pour mettre en pause (optionnel)
+  method: plugin # method: barmanObjectStore par défaut
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  cluster:
+    name: db2
